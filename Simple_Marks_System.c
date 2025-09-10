@@ -12,7 +12,7 @@ int main() {
         printf("Subject %d: ", i + 1);
         scanf("%d", &marks[i]);
 
-        // Optional: Validate input
+        
         if (marks[i] < 0 || marks[i] > 100) {
             printf("Invalid marks entered. Must be between 0 and 100.\n");
             return 1;
