@@ -33,18 +33,4 @@ int main() {
         if (number < smallest)
             smallest = number;
 
-        if (number > largest)
-            largest = number;
-    }
-
-    // Calculate average
-    double average = sum / N;
-
-    // Display results
-    cout << "\nSmallest number: " << smallest << endl;
-    cout << "Largest number: " << largest << endl;
-    cout << "Average: " << average << endl;
-
-    return 0;
-}
-
+        if (
