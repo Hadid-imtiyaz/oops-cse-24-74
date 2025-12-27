@@ -1,76 +1,125 @@
 
+#include <cmath>
 #include <iostream>
 
 using namespace std;
 
-enum Etype {
-    laborer, secretary, manager, accountant, executive, researcher
-};
+class Fraction {
+private:
+    int numerator;
 
-struct Date {
-    int month;
-    int day;
-    int year;
-};
+    int denominator;
 
-struct Employee {
-    int number;
-    float salary;
-    Date date;
-    Etype etype;
+public:
+    Fraction() : numerator(0), denominator(1) {}
+
+    Fraction(int n, int d) : numerator(n), denominator(d) {
+        checkZeroDenominator();
+        lowTerms();
+    }
+
+    Fraction operator+(const Fraction &f) const {
+        return Fraction(numerator * f.denominator + denominator * f.numerator,
+                        denominator * f.denominator);
+    }
+
+    Fraction operator-(const Fraction &f) const {
+        return Fraction(numerator * f.denominator - denominator * f.numerator,
+                        denominator * f.denominator);
+    }
+
+    Fraction operator*(const Fraction &f) const {
+        return Fraction(numerator * f.numerator,
+                        denominator * f.denominator);
+    }
+
+    Fraction operator/(const Fraction &f) const {
+        f.checkZeroDenominator();
+
+        return Fraction(numerator * f.denominator,
+                        denominator * f.numerator);
+    }
+
+    void init() {
+        char c;
+
+        cin >> numerator >> c >> denominator;
+
+        checkZeroDenominator();
+        lowTerms();
+    }
+
+    void show() const {
+        cout << numerator << '/' << denominator;
+    }
+
+    void lowTerms() {
+        int num = abs(numerator);
+        int den = abs(denominator);
+
+        checkZeroDenominator();
+
+        while (num != 0) {
+            if (num < den) {
+                swap(num, den);
+            }
+            num -= den;
+        }
+
+        int gcd = den;
+        numerator /= gcd;
+        denominator /= gcd;
+    }
+
+    void checkZeroDenominator() const {
+        if (denominator == 0) {
+            cout << "Division by zero!" << endl;
+            exit(1);
+        }
+    }
 };
 
 int main() {
-    Employee employee[3];
+    Fraction firstFraction;
+    Fraction secondFraction;
+    char operation;
+    char isContinue;
 
-    for (int i = 0; i < 3; ++i) {
-        cout << "Employee " << i + 1 << ':' << endl
-             << "Enter number:" << endl;
-        cin >> employee[i].number;
+    do {
+        cout << "Enter first fraction, operation and second fraction:" << endl;
+        firstFraction.init();
+        cin >> operation;
+        secondFraction.init();
 
-        cout << "Enter salary:" << endl;
-        cin >> employee[i].salary;
-
-        cout << "Enter date in format 12/31/2003:" << endl;
-        cin >> employee[i].date.month >> employee[i].date.day >> employee[i].date.year;
-
-        char c;
-        cout << "Enter first letter from tittles list:" << endl
-             << "laborer, secretary, manager, accountant, executive, researcher" << endl;
-        cin >> c;
-
-        switch (c) {
-            case 'l':
-                employee[i].etype = laborer;
+        switch (operation) {
+            case '+':
+                cout << "Sum is ";
+                (firstFraction + secondFraction).show();
                 break;
 
-            case 's':
-                employee[i].etype = secretary;
+            case '-':
+                cout << "Difference is ";
+                (firstFraction - secondFraction).show();
                 break;
 
-            case 'm':
-                employee[i].etype = manager;
+            case '*':
+                cout << "Multiplication is ";
+                (firstFraction * secondFraction).show();
                 break;
 
-            case 'a':
-                employee[i].etype = accountant;
-                break;
-
-            case 'e':
-                employee[i].etype = executive;
-                break;
-
-            case 'r':
-                employee[i].etype = researcher;
+            case '/':
+                cout << "Division is ";
+                (firstFraction / secondFraction).show();
                 break;
 
             default:
-                cout << "There is no such title!";
-                return 0;
+                cout << "Unknown operation!";
+                break;
         }
-    }
 
-    
+        cout << "\nContinue(y/n)?:";
+        cin >> isContinue;
+    } while (isContinue != 'n');
 
     return 0;
 }

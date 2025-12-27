@@ -1,21 +1,47 @@
-
+#include <cstdlib>
 #include <iostream>
 
 using namespace std;
 
-struct Time {
-    int hour;
-    int minute;
-    int second;
+class Array {
+private:
+    static const int LIMIT = 100;
+
+    int array[LIMIT];
+
+    int minIndex;
+
+    int maxIndex;
+
+public:
+    Array() : array(), minIndex(0), maxIndex(LIMIT - 1) {}
+
+    Array(int minInd, int maxInd) : array() {
+        int range = maxInd - minInd;
+        if (range >= LIMIT) {
+            cout << endl << "Buffer is too little!" << endl;
+            exit(1);
+        }
+
+        minIndex = minInd;
+        maxIndex = maxInd;
+    }
+
+    int &operator[](int i) {
+        if (i < minIndex || i > maxIndex) {
+            cout << endl << "Index out of range!" << endl;
+        }
+
+        return array[i - minIndex];
+    }
 };
 
 int main() {
-    Time time = {};
+    Array array(-50, 49);
 
-    cout << "Enter time:" << endl;
-    cin >> time.hour >> time.minute >> time.second;
+    array[0] = 123;
 
-    cout << "Total seconds is " << time.hour * 3600 + time.minute * 60 + time.second << endl;
+    cout << array[0];
 
     return 0;
 }
